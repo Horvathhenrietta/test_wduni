@@ -33,5 +33,13 @@ class ToDoList(unittest.TestCase):
         # then
         self.assertTrue(to_do_el[0].text != " Go to potion class")
 
+    def test_set_completed(self):
+        # given
+        to_do_el = self.driver.find_element(By.XPATH, "//li[1]")
+        # when
+        to_do_el.click()
+        # then
+        self.assertTrue("completed" in to_do_el.get_attribute("class"))
+
     def tearDown(self):
         self.driver.quit()
