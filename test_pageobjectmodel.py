@@ -67,10 +67,11 @@ class PageObjectModel(unittest.TestCase):
             cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
             arrow_right = self.driver.find_element(By.XPATH, "//div[@id='carousel-example-generic']/a[2]")
             cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            # then
             self.assertIn("active", cur_item.get_attribute("class"))
             self.assertIn("active", cur_dot.get_attribute("class"))
+            # when
             arrow_right.click()
-            print(i)
 
     def test_carousel_left_arrow(self):
         for i in range(3, 0):
@@ -79,10 +80,23 @@ class PageObjectModel(unittest.TestCase):
             cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
             arrow_left = self.driver.find_element(By.XPATH, "//div[@id='carousel-example-generic']/a[1]")
             cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            # when
             arrow_left.click()
+            # then
             self.assertIn("active", cur_item.get_attribute("class"))
             self.assertIn("active", cur_dot.get_attribute("class"))
-            print(i)
+
+    def test_carousel_dots(self):
+        for i in range(1, 4):
+            # given
+            cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
+            cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            # when
+            cur_dot.click()
+            time.sleep(1)
+            # then
+            self.assertIn("active", cur_item.get_attribute("class"))
+            self.assertIn("active", cur_dot.get_attribute("class"))
 
     def tearDown(self) -> None:
         self.driver.quit()
