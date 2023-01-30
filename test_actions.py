@@ -1,8 +1,10 @@
-import time
 import unittest
 from selenium import webdriver
+from selenium.webdriver.common.alert import Alert
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 
 
 class ActionsTest(unittest.TestCase):
@@ -31,6 +33,24 @@ class ActionsTest(unittest.TestCase):
         # then
         self.assertIn("double", el.get_attribute("class"))
         self.assertEqual(el.value_of_css_property("background-color"), "rgba(147, 203, 90, 1)")
+
+    def test_hover_over(self):
+        # given
+        wait = WebDriverWait(self.driver, 10)
+        el_hover = self.driver.find_elements(By.CSS_SELECTOR, ".dropdown")
+        el_links = self.driver.find_elements(By.CSS_SELECTOR, ".list-alert")
+        a = ActionChains(self.driver)
+        # when
+        for i, el in enumerate(el_hover):
+            a.move_to_element(el_hover[i]).perform()
+            el_links[i].click()
+            wait.until(EC.alert_is_present())
+            Alert(self.driver).accept()
+            if i == 2:
+                a.move_to_element(el_hover[i]).perform()
+                el_links[i + 1].click()
+                wait.until(EC.alert_is_present())
+                Alert(self.driver).dismiss()
 
     def tearDown(self) -> None:
         self.driver.quit()
