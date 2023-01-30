@@ -4,6 +4,9 @@ from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
+from custom_wait_conditions import element_has_css_class
+
+
 
 
 class PageObjectModel(unittest.TestCase):
@@ -25,12 +28,6 @@ class PageObjectModel(unittest.TestCase):
     def test_navigation(self):
         # given
         expected_urls = ["index.html", "products.html", "contactus.html"]
-        # this would only assert if the elements have the expected urls in the href attribute
-        # elements = self.driver.find_elements(By.XPATH, "//nav//ul//li//a")
-        # for i, el in enumerate(elements):
-        #     self.assertIn(expected_urls[i], el.get_attribute("href"))
-        # actually checks if nav buttons were clicked do they redirect to the correct page
-        # I don't know if it's actually useful but anyway:
         for i, expected_url in enumerate(expected_urls):
             # when
             el = self.driver.find_element(By.XPATH, f"//nav//ul//li[position()={i + 1}]")
@@ -63,40 +60,43 @@ class PageObjectModel(unittest.TestCase):
     def test_carousel_right_arrow(self):
         for i in range(1, 4):
             # given
-            time.sleep(1)
-            cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
+            wait = WebDriverWait(self.driver, 10)
+            active_img = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
             arrow_right = self.driver.find_element(By.XPATH, "//div[@id='carousel-example-generic']/a[2]")
-            cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            active_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            wait.until(element_has_css_class((By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]'), "active"))
             # then
-            self.assertIn("active", cur_item.get_attribute("class"))
-            self.assertIn("active", cur_dot.get_attribute("class"))
+            self.assertIn("active", active_img.get_attribute("class"))
+            self.assertIn("active", active_dot.get_attribute("class"))
             # when
             arrow_right.click()
 
     def test_carousel_left_arrow(self):
         for i in range(3, 0):
             # given
-            time.sleep(1)
-            cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
+            wait = WebDriverWait(self.driver, 10)
+            active_img = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
             arrow_left = self.driver.find_element(By.XPATH, "//div[@id='carousel-example-generic']/a[1]")
-            cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            active_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            wait.until(element_has_css_class((By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]'), "active"))
             # when
             arrow_left.click()
             # then
-            self.assertIn("active", cur_item.get_attribute("class"))
-            self.assertIn("active", cur_dot.get_attribute("class"))
+            self.assertIn("active", active_img.get_attribute("class"))
+            self.assertIn("active", active_dot.get_attribute("class"))
 
     def test_carousel_dots(self):
         for i in range(1, 4):
             # given
-            cur_item = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
-            cur_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
+            wait = WebDriverWait(self.driver, 10)
+            active_img = self.driver.find_element(By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]')
+            active_dot = self.driver.find_element(By.XPATH, f"//div[@id='carousel-example-generic']/ol/li[{i}]")
             # when
-            cur_dot.click()
-            time.sleep(1)
+            active_dot.click()
+            wait.until(element_has_css_class((By.XPATH, f'//div[@class="carousel-inner"]/div[{i}]'), "active"))
             # then
-            self.assertIn("active", cur_item.get_attribute("class"))
-            self.assertIn("active", cur_dot.get_attribute("class"))
+            self.assertIn("active", active_img.get_attribute("class"))
+            self.assertIn("active", active_dot.get_attribute("class"))
 
     def tearDown(self) -> None:
         self.driver.quit()
