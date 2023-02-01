@@ -12,7 +12,7 @@ class ActionsTest(unittest.TestCase):
         self.driver = webdriver.Chrome()
         self.driver.get("http://www.webdriveruniversity.com/Actions/index.html#")
 
-    def test_dropping(self):
+    def test_drag_and_drop(self):
         # given
         draggable_el = self.driver.find_element(By.ID, "draggable")
         droppable_el = self.driver.find_element(By.XPATH, "//div[@id='droppable']/p")

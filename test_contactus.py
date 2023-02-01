@@ -15,7 +15,7 @@ class ContactUs(unittest.TestCase):
         self.submit_btn = self.driver.find_element(By.XPATH, "//input[@type='submit']")
         self.reset_btn = self.driver.find_element(By.XPATH, "//input[@type='reset']")
 
-    def test_contact_us_with_correct_data_should_redirect_to_thankyou_page(self):
+    def test_contact_us_with_correct_data(self):
         # given
         self.first_name.send_keys("Joe")
         self.last_name.send_keys("Doe")
@@ -27,7 +27,7 @@ class ContactUs(unittest.TestCase):
         self.assertTrue("Thank You for your Message!" == self.driver.find_element(By.XPATH, "//h1").text)
         self.assertIn("thank-you", self.driver.current_url)
 
-    def test_contact_us_with_incorrect_data_should_redirect_to_error_page(self):
+    def test_contact_us_with_incorrect_data(self):
         # given
         self.email.send_keys("notanemail")
         # when
@@ -36,7 +36,7 @@ class ContactUs(unittest.TestCase):
         self.assertIn("Error: all fields are required", self.driver.find_element(By.XPATH, "/html/body").text)
         self.assertIn("Error: Invalid email address", self.driver.find_element(By.XPATH, "/html/body").text)
 
-    def test_contact_us_reset_should_clear_form_inputs(self):
+    def test_contact_us_reset(self):
         # given
         self.first_name.send_keys("Joe")
         self.last_name.send_keys("Doe")
