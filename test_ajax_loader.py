@@ -13,7 +13,6 @@ class AjaxLoader(unittest.TestCase):
     def test_ajax_loader(self):
         # given
         wait = WebDriverWait(self.driver, 10)
-        loader = self.driver.find_element(By.ID, "loader")
         btn = self.driver.find_element(By.XPATH, "//span[@id='button1']/p")
 
         wait.until(EC.visibility_of_element_located((By.XPATH, "//span[@id='button1']/p")))
